@@ -5,10 +5,24 @@ import (
 	"fmt"
 	"ocrawler/utils"
 	"bufio"
+	"time"
+)
+
+var rateLimiter = time.Tick(1 * time.Millisecond)
+var  (
+	reqHeaderKey = "User-Agent"
+	reqHeaderValue = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.137 Safari/537.36 LBBROWSER"
 )
 
 func Fetch(url string) ([]byte, error) {
-	resp, err := http.Get(url)
+	<-rateLimiter
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add(reqHeaderKey, reqHeaderValue)
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -24,5 +38,7 @@ func Fetch(url string) ([]byte, error) {
 	}
 	return contents, nil
 }
+
+
 
 

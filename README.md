@@ -1,5 +1,5 @@
 # ocrawler
-高并发爬虫 + 分布式爬虫实现
+Go语言实现 高并发爬虫 + 分布式爬虫
 
 
 future work
